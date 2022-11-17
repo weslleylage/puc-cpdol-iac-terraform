@@ -12,6 +12,13 @@ resource "aws_instance" "this" {
   count         = 1
   key_name      = aws_key_pair.this.key_name
   user_data     = file("../scripts/userdata-ec2.sh")
+  root_block_device {
+    encrypted = true
+  }
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
   tags = merge(
     {
       Name = "${local.prefix}-ec2"
@@ -20,4 +27,5 @@ resource "aws_instance" "this" {
   )
   vpc_security_group_ids = [aws_security_group.sg-ssh-http.id]
   subnet_id              = aws_subnet.this.id
+  depends_on             = [aws_efs_file_system.this, aws_subnet.this, aws_security_group.sg-ssh-http]
 }

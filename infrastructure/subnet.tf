@@ -13,4 +13,5 @@ resource "aws_subnet" "this" {
     },
     local.commom_tags
   )
+  depends_on = [aws_vpc.this]
 }

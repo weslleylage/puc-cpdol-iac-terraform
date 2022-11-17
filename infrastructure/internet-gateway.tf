@@ -6,4 +6,5 @@ resource "aws_internet_gateway" "this" {
     },
     local.commom_tags
   )
+  depends_on = [aws_vpc.this]
 }
