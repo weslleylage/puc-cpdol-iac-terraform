@@ -1,0 +1,53 @@
+name: Infracost
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  Infracost:
+    name: Infracost-Validate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infrastructure
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v2
+        with:
+          api-key: ${{secrets.INFRACOST_API_KEY}}
+
+      - name: Checkout Base Branch
+        uses: actions/setup@v2
+        with:
+          ref: '${{github.event.pull_request.base.ref}}'
+
+      - name: Generate Infracost
+        run: | 
+          infracost breakdown --path=. \
+                              --format=json \
+                              --output-file=/tmp/infracost-base.json
+
+      - name: Checkout PR Branch
+        uses: actions/setup@v2
+
+      - name: Generate Infracost Difference
+        run: | 
+          infracost diff --path=. \
+                              --format=json \
+                              --compare-to=/tmp/infracost-base.json \
+                              --output-file=/tmp/infracost.json
+
+      - name: Note Infracost
+        run: | 
+          infracost comment github --path=/tmp/infracost.json \
+                              --repo=$GITHUB_REPOSITORY \
+                              --policy-path cost-policy.rego \
+                              --github-token=${{github.token}} \
+                              --pull-request=${{github.event.pull_request.number}} \
+                              --behavior=update
