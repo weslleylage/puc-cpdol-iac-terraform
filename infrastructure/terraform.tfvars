@@ -1,5 +1,5 @@
 aws_profile       = "terraform-puc"
 aws_region        = "us-east-1"
 aws_instance_type = "t2.micro"
-aws_public_key    = "..........."
 prefix            = "infrastructure"
+aws_public_key    = "..........."
