@@ -1,0 +1,17 @@
+version: "3.7" 
+services:
+  puc-app-cpdol-iac:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: weslleylage/puc-app-cpdol-iac
+    container_name: puc-app-cpdol-iac
+    networks: 
+      - puc-app-cpdol-iac
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/usr/share/nginx/html
+networks:
+  puc-app-cpdol-iac:
+    driver: bridge

@@ -1,9 +1,4 @@
 draft
-app
-nginx
 .infracost
 infrastructure/.terraform
 infrastructure/.terraform.lock.hcl
-
-Dockerfile
-docker-compose.yml
