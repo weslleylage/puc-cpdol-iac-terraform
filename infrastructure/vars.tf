@@ -18,6 +18,11 @@ variable "aws_public_key" {
   description = "Chave publica ssh"
 }
 
+variable "path_private_key" {
+  type        = string
+  description = "Path chave privada ssh"
+}
+
 variable "prefix" {
   type = string
 }
